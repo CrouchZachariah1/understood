@@ -1,12 +1,11 @@
+import { cache } from "react";
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 
-const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
-
 function createClient() {
-  const connectionString = process.env.DATABASE_URL;
+  const connectionString = process.env.DATABASE_URL ?? "";
   const log = process.env.NODE_ENV === "development" ? (["error", "warn"] as const) : (["error"] as const);
-  if (connectionString?.startsWith("postgres")) {
+  if (connectionString.startsWith("postgres")) {
     return new PrismaClient({
       adapter: new PrismaNeon({ connectionString }),
       log: [...log],
@@ -15,8 +14,12 @@ function createClient() {
   return new PrismaClient({ log: [...log] });
 }
 
-export const prisma = globalForPrisma.prisma ?? createClient();
+export const getPrisma = cache(createClient);
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop, _receiver) {
+    const client = getPrisma();
+    const value = Reflect.get(client, prop, client);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+});

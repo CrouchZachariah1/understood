@@ -37,6 +37,14 @@ yarn-error.log*
 # vercel
 .vercel
 
+# cloudflare / opennext
+.open-next
+.dev.vars
+secrets.json
+.wrangler
+wrangler.toml
+*.toml.bak
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
@@ -50,3 +58,6 @@ next-env.d.ts
 # local scratch
 /resume.txt
 /New Text Document.txt
+
+.vercel
+.env*
