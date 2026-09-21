@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  --season-primary: #ff6b2c;
+  --season-secondary: #1ea7e1;
+  --season-accent: #ffd23f;
+  --season-bg: #fff8ee;
+  --season-fg: #072448;
+  --season-muted: #f3e4c8;
+  --background: var(--season-bg);
+  --foreground: var(--season-fg);
+  --radius: 0.75rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--season-primary);
+  --color-secondary: var(--season-secondary);
+  --color-accent: var(--season-accent);
+  --color-muted: var(--season-muted);
+  --font-sans: "Outfit", "Outfit Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", "Syne Fallback", ui-sans-serif, system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+html {
+  background: var(--season-bg);
+  color: var(--season-fg);
+}
+
+body {
+  background: var(--season-bg);
+  color: var(--season-fg);
+  font-family: var(--font-sans);
+  min-height: 100%;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+::selection {
+  background: var(--season-accent);
+  color: var(--season-fg);
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+.texture-summer {
+  background-image:
+    radial-gradient(circle at 12% 18%, color-mix(in oklab, var(--season-accent) 40%, transparent), transparent 36%),
+    radial-gradient(circle at 88% 8%, color-mix(in oklab, var(--season-secondary) 28%, transparent), transparent 32%);
+}
+
+.texture-spring {
+  background-image:
+    radial-gradient(circle at 20% 10%, color-mix(in oklab, var(--season-primary) 18%, transparent), transparent 40%),
+    radial-gradient(circle at 90% 80%, color-mix(in oklab, var(--season-accent) 22%, transparent), transparent 36%);
+}
+
+.texture-autumn {
+  background-image:
+    radial-gradient(circle at 10% 80%, color-mix(in oklab, var(--season-primary) 22%, transparent), transparent 42%),
+    linear-gradient(180deg, transparent, color-mix(in oklab, var(--season-muted) 55%, transparent));
+}
+
+.texture-winter {
+  background-image:
+    linear-gradient(180deg, color-mix(in oklab, var(--season-secondary) 8%, transparent), transparent 40%),
+    radial-gradient(circle at 80% 0%, color-mix(in oklab, var(--season-accent) 24%, transparent), transparent 34%);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
