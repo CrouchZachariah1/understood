@@ -24,6 +24,20 @@ Generate `AUTH_SECRET` without printing it:
 node -e "require('fs').appendFileSync('.env.local','AUTH_SECRET='+require('crypto').randomBytes(32).toString('base64url')+'\n')"
 ```
 
+## Cloudflare
+
+This repo can build on Cloudflare Workers / Pages. The dashboard command `npx wrangler deploy` will detect Next.js and run an OpenNext build.
+
+The last failed deploy died while prerendering `/sitemap.xml` because `DATABASE_URL` was not set. The sitemap now builds without a database.
+
+Set these as **Cloudflare Worker secrets / environment variables** before a production launch:
+
+- `DATABASE_URL` — a hosted Postgres URL (Neon, etc.). A local SQLite file will not work on Cloudflare.
+- `AUTH_SECRET`
+- `APP_URL` / `NEXT_PUBLIC_APP_URL`
+
+After the first successful build, switch Prisma `provider` to `postgresql` if you are no longer using SQLite locally.
+
 ## Vercel
 
 This repo is already linkable with the Vercel CLI.

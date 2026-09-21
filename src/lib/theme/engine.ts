@@ -41,17 +41,21 @@ export function tokensToCss(tokens: ThemeTokens): Record<string, string> {
 }
 
 export async function getActiveTheme(): Promise<ThemeTokens> {
-  const jar = await cookies();
-  const previewId = jar.get(PREVIEW_COOKIE)?.value;
-  if (previewId) {
-    const preview = await prisma.theme.findUnique({ where: { id: previewId } });
-    if (preview) return themeToTokens(preview);
+  try {
+    const jar = await cookies();
+    const previewId = jar.get(PREVIEW_COOKIE)?.value;
+    if (previewId) {
+      const preview = await prisma.theme.findUnique({ where: { id: previewId } });
+      if (preview) return themeToTokens(preview);
+    }
+    const published = await prisma.theme.findFirst({
+      where: { published: true },
+      orderBy: { updatedAt: "desc" },
+    });
+    if (published) return themeToTokens(published);
+  } catch {
+    // Build/deploy hosts may not have a database yet.
   }
-  const published = await prisma.theme.findFirst({
-    where: { published: true },
-    orderBy: { updatedAt: "desc" },
-  });
-  if (published) return themeToTokens(published);
   return SEASON_THEMES.SUMMER;
 }
 
